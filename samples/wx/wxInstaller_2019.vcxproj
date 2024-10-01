@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>wxInstaller</ProjectName>
+    <ProjectGuid>{AE1C39FC-A03D-4947-9127-ABE9FE7EDF3A}</ProjectGuid>
+    <RootNamespace>wxInstaller</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\src\ptlib\msos\PTLib.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\src\ptlib\msos\PTLib.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\..\bin\wxSample\Installer\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\$(Platform)\</IntDir>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">*.wixobj%3b*.msi%3b$(TargetPath)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|x64'">*.wixobj%3b*.msi%3b$(TargetPath)</ExtensionsToDeleteOnClean>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>wxSample_$(Platform)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)..\..\bin\wxSample\Installer\</OutDir>
+    <IntDir>$(OutDir)\$(Platform)\</IntDir>
+    <TargetName>wxSample_$(Platform)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\tools\ptlib_installer.wxs">
+      <FileType>Document</FileType>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">﻿WiX Installer Generation</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">﻿WiX Installer Generation</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PATH "$(WIX)\bin";%PATH%
+candle -nologo -dProjectDir=$(ProjectDir) -dMSVCRT_VER=$(PlatformToolsetVersion) -dPlatform=$(Platform) -dArchitecture=$(PlatformTargetAsMSBuildArchitecture) -out "$(IntDir)%(Filename).wixobj" "%(FullPath)"
+light -nologo -sice:ICE03 -sice:ICE60 -sice:ICE61 -sice:ICE82 -ext WixUIExtension -pdbout "$(IntDir)%(Filename).wixpdb" -out "$(OutDir)$(TargetName).msi" "$(IntDir)%(Filename).wixobj"
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PATH "$(WIX)\bin";%PATH%
+candle -nologo -dProjectDir=$(ProjectDir) -dMSVCRT_VER=$(PlatformToolsetVersion) -dPlatform=$(Platform) -dArchitecture=$(PlatformTargetAsMSBuildArchitecture) -out "$(IntDir)%(Filename).wixobj" "%(FullPath)"
+light -nologo -sice:ICE03 -sice:ICE60 -sice:ICE61 -sice:ICE82 -ext WixUIExtension -pdbout "$(IntDir)%(Filename).wixpdb" -out "$(OutDir)$(TargetName).msi" "$(IntDir)%(Filename).wixobj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)$(TargetName).msi</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)$(TargetName).msi</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.wxs" />
+    <CustomBuild Include="config.wxs.in">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" "%(RootDir)%(Directory)%(Filename)" &gt; nul</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying default installer configuration</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)%(Filename)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" "%(RootDir)%(Directory)%(Filename)" &gt; nul</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying default installer configuration</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)%(Filename)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="wx_2019.vcxproj">
+      <Project>{56e04ff6-6aeb-4917-b8fc-6c0c1f5831f1}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,8 @@
+<Include>
+    <?define ProductName = "wxSample" ?>
+    <?define ProductDescription = "Sample wxWidgets app for PTlib" ?>
+    <?define ProductBaseFilename = "wxSample" ?>
+    <?define ProductVersion = "1.0.0" ?>
+    <?define ProductManufacturer = "Vox Lucida Pty. Ltd." ?>
+    <?define ProductGUID = "6bbc86f3-6a07-4c7f-9a22-2455bf3e5aad" ?>
+</Include>
