@@ -27,10 +27,9 @@
 #define _PTLib_REVISION_H
 
 #define SVN_REVISION 0
-#define GIT_COMMIT ""
+#define GIT_COMMIT    "54bf9d27661e7d776fe9faf79838c50d107bc49e"
 
 #endif  // _PTLib_REVISION_H
 
 
 // End of File ///////////////////////////////////////////////////////////////
-
