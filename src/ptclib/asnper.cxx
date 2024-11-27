@@ -347,18 +347,18 @@ PBoolean PASN_BitString::DecodePER(PPER_Stream & strm)
     if (!strm.MultiBitDecode(totalBits, theBits))
       return false;
 
-    bitData[0] = (BYTE)(theBits << (8-totalBits));
+    bitData[(PINDEX)0] = (BYTE)(theBits << (8-totalBits));
   }
   else {  // 15.8
     if (!strm.MultiBitDecode(8, theBits))
       return false;
 
-    bitData[0] = (BYTE)theBits;
+    bitData[(PINDEX)0] = (BYTE)theBits;
 
     if (!strm.MultiBitDecode(totalBits-8, theBits))
       return false;
 
-    bitData[1] = (BYTE)(theBits << (16-totalBits));
+    bitData[(PINDEX)1] = (BYTE)(theBits << (16-totalBits));
   }
 
   return true;
@@ -377,10 +377,10 @@ void PASN_BitString::EncodePER(PPER_Stream & strm) const
   if (totalBits > 16)
     strm.BlockEncode(bitData, (totalBits+7)/8);   // 15.9
   else if (totalBits <= 8)  // 15.8
-    strm.MultiBitEncode(bitData[0] >> (8 - totalBits), totalBits);
+    strm.MultiBitEncode(bitData[(PINDEX)0] >> (8 - totalBits), totalBits);
   else {
-    strm.MultiBitEncode(bitData[0], 8);
-    strm.MultiBitEncode(bitData[1] >> (16 - totalBits), totalBits-8);
+    strm.MultiBitEncode(bitData[(PINDEX)0], 8);
+    strm.MultiBitEncode(bitData[(PINDEX)1] >> (16 - totalBits), totalBits-8);
   }
 }
 
@@ -436,16 +436,16 @@ PBoolean PASN_OctetString::DecodePER(PPER_Stream & strm)
     case 1 :  // 16.6
       if (!strm.MultiBitDecode(8, theBits))
         return false;
-      value[0] = (BYTE)theBits;
+      value[(PINDEX)0] = (BYTE)theBits;
       break;
 
     case 2 :  // 16.6
       if (!strm.MultiBitDecode(8, theBits))
         return false;
-      value[0] = (BYTE)theBits;
+      value[(PINDEX)0] = (BYTE)theBits;
       if (!strm.MultiBitDecode(8, theBits))
         return false;
-      value[1] = (BYTE)theBits;
+      value[(PINDEX)1] = (BYTE)theBits;
       break;
 
     default: // 16.7
@@ -473,12 +473,12 @@ void PASN_OctetString::EncodePER(PPER_Stream & strm) const
       break;
 
     case 1 :  // 16.6
-      strm.MultiBitEncode(value[0], 8);
+      strm.MultiBitEncode(value[(PINDEX)0], 8);
       break;
 
     case 2 :  // 16.6
-      strm.MultiBitEncode(value[0], 8);
-      strm.MultiBitEncode(value[1], 8);
+      strm.MultiBitEncode(value[(PINDEX)0], 8);
+      strm.MultiBitEncode(value[(PINDEX)1], 8);
       break;
 
     default: // 16.7
@@ -509,7 +509,7 @@ PBoolean PASN_ConstrainedString::DecodePER(PPER_Stream & strm)
 
   if (len == 0) { // 10.9.3.3
     value.SetSize(1);
-    value[0] = '\0';
+    value[(PINDEX)0] = '\0';
     return true;
   }
 

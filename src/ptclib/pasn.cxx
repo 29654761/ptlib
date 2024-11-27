@@ -874,13 +874,13 @@ PBoolean PASNObjectID::Decode(const PBYTEArray & buffer, PINDEX & offs)
      *  X is the value of the first subidentifier.
      *  Y is the value of the second subidentifier.
      */
-    subId = value[1];
+    subId = value[(PINDEX)1];
     if (subId == 0x2B) {
-      value[0] = 1;
-      value[1] = 3;
+      value[(PINDEX)0] = 1;
+      value[(PINDEX)1] = 3;
     } else {
-      value[1] = subId % 40;
-      value[0] = (subId - value[1]) / 40;
+      value[(PINDEX)1] = subId % 40;
+      value[(PINDEX)0] = (subId - value[(PINDEX)1]) / 40;
     }
   }
 
@@ -1184,13 +1184,13 @@ PString PASNIPAddress::GetString() const
   if (len < 4) {
     PString out = "Hex";
     for (PINDEX i = 0; i < len; i++)
-      out &= psprintf("%02x", (BYTE)value[i]);
+      out &= psprintf("%02x", (BYTE)value[(PINDEX)i]);
     return out;
   }
 
   return psprintf("%i.%i.%i.%i",
-         (BYTE)value[0], (BYTE)value[1],
-         (BYTE)value[2], (BYTE)value[3]);
+         (BYTE)value[(PINDEX)0], (BYTE)value[(PINDEX)1],
+         (BYTE)value[(PINDEX)2], (BYTE)value[(PINDEX)3]);
 }
 
 
@@ -1205,7 +1205,7 @@ PASNIPAddress::PASNIPAddress(const PString & str)
 
   int i;
   for (i = 0; i < 4; i++)
-    value[i] = addr[i];
+    value[(PINDEX)i] = addr[i];
 
   valueLen = 4;
 }
@@ -1213,8 +1213,8 @@ PASNIPAddress::PASNIPAddress(const PString & str)
 
 PIPSocket::Address PASNIPAddress::GetIPAddress () const
 {
-  return PIPSocket::Address((BYTE)value[0], (BYTE)value[1],
-                            (BYTE)value[2], (BYTE)value[3]);
+  return PIPSocket::Address((BYTE)value[(PINDEX)0], (BYTE)value[(PINDEX)1],
+                            (BYTE)value[(PINDEX)2], (BYTE)value[(PINDEX)3]);
 }
 
 PASNNull::PASNNull()

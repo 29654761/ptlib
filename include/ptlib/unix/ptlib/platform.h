@@ -138,9 +138,9 @@
 
 #define HAS_IFREQ
 
-#if __GNU_LIBRARY__ < 6
-  typedef int socklen_t;
-#endif
+//#if __GNU_LIBRARY__ < 6
+//  typedef int socklen_t;
+//#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 #elif defined(P_GNU)

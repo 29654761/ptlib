@@ -86,7 +86,7 @@ class PConfig::Cached : public PDictionary<PCaselessString, PStringOptions>
 
 static bool IsComment(const PString& str)
 {
-  return str.GetLength() && strchr(";#", str[0]);
+  return str.GetLength() && strchr(";#", str[(PINDEX)0]);
 }
 
 
@@ -156,7 +156,7 @@ PConfig::Cached::Cached(const PFilePath & path)
       continue;
     }
 
-    if (line[0] == '[') {
+    if (line[(PINDEX)0] == '[') {
       PCaselessString sectionName = line(1, line.Find(']')-1).Trim();
       if ((currentSection = GetAt(sectionName)) == NULL)
         SetAt(sectionName, currentSection = new PStringOptions());

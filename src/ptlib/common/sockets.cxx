@@ -862,7 +862,7 @@ WORD PSocket::GetPortByService(const char * protocol, const PString & service)
   long portNum;
   if (space != P_MAX_INDEX)
     portNum = atol(service(space+1, P_MAX_INDEX));
-  else if (isdigit(service[0]))
+  else if (isdigit(service[(PINDEX)0]))
     portNum = atoi(service);
   else
     portNum = -1;
@@ -1866,7 +1866,7 @@ PString PIPSocket::Address::AsString(bool IPV6_PARAM(bracketIPv6),
 PBoolean PIPSocket::Address::FromString(const PString & str)
 {
   PString iface;
-  if (str[0] == '%')
+  if (str[(PINDEX)0] == '%')
     iface = str.Mid(1);
   else {
     m_version = 0;
@@ -2851,7 +2851,7 @@ bool PIPSocket::AddressAndPort::Parse(const PString & str, WORD port, char separ
     m_separator = separator;
 
   PINDEX pos = 0;
-  if (str[0] == '[')
+  if (str[(PINDEX)0] == '[')
     pos = str.Find(']');
   pos = str.Find(m_separator, pos);
   if (pos != P_MAX_INDEX)

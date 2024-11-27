@@ -2076,7 +2076,7 @@ bool PArgList::Parse(const char * spec, PBoolean optionsBeforeParams)
   bool hadMinusMinus = m_options.empty();
   while (arg < m_argumentArray.GetSize()) {
     const PString & argStr = m_argumentArray[arg];
-    if (hadMinusMinus || argStr[0] != '-' || argStr[1] == '\0') {
+    if (hadMinusMinus || argStr[(PINDEX)0] != '-' || argStr[(PINDEX)1] == '\0') {
       // have a parameter string
       m_parameterIndex.SetSize(param+1);
       m_parameterIndex[param++] = arg;
@@ -2090,7 +2090,7 @@ bool PArgList::Parse(const char * spec, PBoolean optionsBeforeParams)
     }
     else if (optionsBeforeParams && m_parameterIndex.GetSize() > 0)
       break;
-    else if (argStr[1] == '-') {
+    else if (argStr[(PINDEX)1] == '-') {
       PINDEX equals = argStr.Find('=');
       if (equals != P_MAX_INDEX)
         ++equals;
@@ -2122,7 +2122,7 @@ size_t PArgList::InternalFindOption(const PString & name) const
 {
   size_t opt;
   for (opt = 0; opt < m_options.size(); ++opt) {
-    if (name.GetLength() == 1 ? (m_options[opt].m_letter == name[0]) : (m_options[opt].m_name == name))
+    if (name.GetLength() == 1 ? (m_options[opt].m_letter == name[(PINDEX)0]) : (m_options[opt].m_name == name))
       break;
   }
   return opt;
@@ -2254,7 +2254,7 @@ PString PArgList::GetParameter(PINDEX num) const
 {
   int idx = m_shift + (int)num;
   if (idx >= 0 && idx < (int)m_parameterIndex.GetSize())
-    return m_argumentArray[m_parameterIndex[idx]];
+    return m_argumentArray[m_parameterIndex[(PINDEX)idx]];
 
   return PString::Empty();
 }

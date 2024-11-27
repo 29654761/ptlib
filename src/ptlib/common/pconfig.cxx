@@ -56,7 +56,7 @@ PStringToString PConfig::GetAllKeyValues(const PString & section) const
 PBoolean PConfig::GetBoolean(const PString & section, const PString & key, PBoolean dflt) const
 {
   PString str = GetString(section, key, dflt ? "T" : "F").ToUpper();
-  return str[0] == 'T' || str[0] == 'Y' || str.AsInteger() != 0;
+  return str[(PINDEX)0] == 'T' || str[(PINDEX)0] == 'Y' || str.AsInteger() != 0;
 }
 
 

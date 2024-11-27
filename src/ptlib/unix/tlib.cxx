@@ -242,7 +242,7 @@ PBoolean PProcess::SetUserName(const PString & username, PBoolean permanent)
 
   int uid = -1;
 
-  if (username[0] == '#') {
+  if (username[(PINDEX)0] == '#') {
     PString s = username.Mid(1);
     if (s.FindSpan("1234567890") == P_MAX_INDEX)
       uid = s.AsInteger();
@@ -353,7 +353,7 @@ PBoolean PProcess::SetGroupName(const PString & groupname, PBoolean permanent)
 
   int gid = -1;
 
-  if (groupname[0] == '#') {
+  if (groupname[(PINDEX)0] == '#') {
     PString s = groupname.Mid(1);
     if (s.FindSpan("1234567890") == P_MAX_INDEX)
       gid = s.AsInteger();

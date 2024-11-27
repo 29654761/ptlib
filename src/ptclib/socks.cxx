@@ -664,16 +664,16 @@ PBoolean PSocksUDPSocket::ReadFrom(void * buf, PINDEX len, Address & addr, WORD 
     return false;
 
   PINDEX port_pos;
-  switch (newbuf[3]) {
+  switch (newbuf[(PINDEX)3]) {
     case SOCKS_ADDR_DOMAINNAME :
-      if (!PIPSocket::GetHostAddress(PString((const char *)&newbuf[5], (PINDEX)newbuf[4]), addr))
+      if (!PIPSocket::GetHostAddress(PString((const char *)&newbuf[(PINDEX)5], (PINDEX)newbuf[(PINDEX)4]), addr))
         return false;
 
-      port_pos = newbuf[4]+5;
+      port_pos = newbuf[(PINDEX)4]+5;
       break;
 
     case SOCKS_ADDR_IPV4 :
-      memcpy((char *)&addr, &newbuf[4], 4);
+      memcpy((char *)&addr, &newbuf[(PINDEX)4], 4);
       port_pos = 4;
       break;
 

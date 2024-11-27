@@ -752,18 +752,18 @@ PBoolean PASN_ObjectId::CommonDecode(PASN_Stream & strm, unsigned dataLen)
    *  X is the value of the first subidentifier.
    *  Y is the value of the second subidentifier.
    */
-  subId = value[1];
+  subId = value[(PINDEX)1];
   if (subId < 40) {
-    value[0] = 0;
-    value[1] = subId;
+    value[(PINDEX)0] = 0;
+    value[(PINDEX)1] = subId;
   }
   else if (subId < 80) {
-    value[0] = 1;
-    value[1] = subId-40;
+    value[(PINDEX)0] = 1;
+    value[(PINDEX)1] = subId-40;
   }
   else {
-    value[0] = 2;
-    value[1] = subId-80;
+    value[(PINDEX)0] = 2;
+    value[(PINDEX)1] = subId-80;
   }
 
   return true;
@@ -1250,7 +1250,7 @@ PASN_ConstrainedString & PASN_ConstrainedString::operator=(const char * str)
 
   // Make sure string meets minimum length constraint
   while ((int)len < lowerLimit) {
-    newValue << characterSet[0];
+    newValue << characterSet[(PINDEX)0];
     len++;
   }
 
@@ -1676,19 +1676,19 @@ PTime PASN_GeneralisedTime::GetValue() const
   int seconds = 0;
   int zonePos = 12;
 
-  if (isdigit(value[12])) {
+  if (isdigit(value[(PINDEX)12])) {
     seconds = value(12,13).AsInteger();
-    if (value[14] != '.')
+    if (value[(PINDEX)14] != '.')
       zonePos = 14;
     else {
       zonePos = 15;
-      while (isdigit(value[zonePos]))
+      while (isdigit(value[(PINDEX)zonePos]))
         zonePos++;
     }
   }
 
   int zone = PTime::Local;
-  switch (value[zonePos]) {
+  switch (value[(PINDEX)zonePos]) {
     case 'Z' :
       zone = PTime::UTC;
       break;
@@ -1728,13 +1728,13 @@ PTime PASN_UniversalTime::GetValue() const
   int seconds = 0;
   int zonePos = 10;
 
-  if (isdigit(value[10])) {
+  if (isdigit((PINDEX)value[(PINDEX)10])) {
     seconds = value(10,11).AsInteger();
     zonePos = 12;
   }
 
   int zone = PTime::UTC;
-  if (value[zonePos] != 'Z')
+  if (value[(PINDEX)zonePos] != 'Z')
     zone = value(zonePos+1,zonePos+2).AsInteger()*60 +
            value(zonePos+3,zonePos+4).AsInteger();
 

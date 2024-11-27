@@ -220,7 +220,7 @@ bool PYUVFile::InternalOpen(OpenMode mode, OpenOptions opts, PFileInfo::Permissi
     unsigned frameWidth = 0, frameHeight = 0, frameRate = 0, sarWidth = 0, sarHeight = 0;
     for (PINDEX i = 1; i < params.GetSize(); ++i) {
       PString param = params[i].ToUpper();
-      switch (param[0]) {
+      switch (param[(PINDEX)0]) {
         case 'W' :
           frameWidth = param.Mid(1).AsUnsigned();
           m_fixedFrameSize = true;
@@ -240,7 +240,7 @@ bool PYUVFile::InternalOpen(OpenMode mode, OpenOptions opts, PFileInfo::Permissi
           break;
 
         case 'I' :
-          if (param[1] != 'P') {
+          if (param[(PINDEX)1] != 'P') {
             PTRACE(2, "Interlace modes are not supported");
             return false;
           }

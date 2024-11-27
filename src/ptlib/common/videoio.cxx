@@ -548,7 +548,7 @@ PVideoDevice::OpenArgs::OpenArgs()
 
 PString PVideoDevice::GetDeviceNameFromOpenArgs(const OpenArgs & args) const
 {
-  if (args.deviceName[0] != '#')
+  if (args.deviceName[(PINDEX)0] != '#')
     return args.deviceName;
   
   PStringArray devices = GetDeviceNames();

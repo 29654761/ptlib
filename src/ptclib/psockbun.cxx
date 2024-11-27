@@ -242,7 +242,7 @@ static bool SplitInterfaceDescription(const PString & iface,
     return false;
 
   PINDEX right = 0;
-  if (iface[0] == '[')
+  if (iface[(PINDEX)0] == '[')
     right = iface.Find(']');
   PINDEX percent = iface.Find('%', right);
   if (percent == 0) {
@@ -256,7 +256,7 @@ static bool SplitInterfaceDescription(const PString & iface,
     return !address.IsAny();
   }
 
-  if (iface[0] == '*')
+  if (iface[(PINDEX)0] == '*')
     address = PIPSocket::GetDefaultIpAny();
   else
     address = iface.Left(percent);
@@ -663,7 +663,7 @@ PMonitoredSockets * PMonitoredSockets::Create(const PString & iface, bool reuseA
 
   PINDEX percent = iface.Find('%');
 
-  if (percent == 0 || (percent == 1 && iface[0] == '*'))
+  if (percent == 0 || (percent == 1 && iface[(PINDEX)0] == '*'))
     return new PMonitoredSocketBundle(iface.Mid(percent+1), 0, reuseAddr P_NAT_PARAM(natMethods));
 
   PIPSocket::Address ip;

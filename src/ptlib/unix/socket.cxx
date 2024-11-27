@@ -65,6 +65,7 @@
 #endif
 
 #ifdef HAVE_LINUX_ERRQUEUE_H
+  #include <sys/time.h>
   #include <asm/types.h>
   #include <linux/errqueue.h>
 #endif

@@ -176,7 +176,7 @@ PBoolean PSNMPClient::ReadRequest(PBYTEArray & readBuffer)
 
   // if not a valid sequence header, then stop reading
   WORD len;
-  if ((readBuffer[0] != 0x30) ||
+  if ((readBuffer[(PINDEX)0] != 0x30) ||
       !PASNObject::DecodeASNLength(readBuffer, hdrLen, len)) {
     m_lastErrorCode = MalformedResponse;
     return false;

@@ -641,7 +641,7 @@ void PNatMethod_Fixed::InternalUpdate(bool)
     return;
   }
 
-  if (isdigit(type[0]))
+  if (isdigit(type[(PINDEX)0]))
     m_natType = NatTypesFromInt(type.AsInteger());
   else
     m_natType = NatTypesFromString(type);

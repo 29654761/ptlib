@@ -2677,14 +2677,14 @@ PStringArray::PStringArray(PINDEX count, char const * const * strarr, PBoolean c
 PStringArray::PStringArray(const PString & str)
 {
   SetSize(1);
-  (*theArray)[0] = str.CloneAs<PString>();
+  (*theArray)[(PINDEX)0] = str.CloneAs<PString>();
 }
 
 
 PStringArray::PStringArray(const char * cstr)
 {
   SetSize(1);
-  (*theArray)[0] = new PString(cstr);
+  (*theArray)[(PINDEX)0] = new PString(cstr);
 }
 
 

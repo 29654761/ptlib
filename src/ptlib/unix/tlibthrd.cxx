@@ -53,12 +53,12 @@
 #ifndef P_ANDROID
   #define P_USE_THREAD_CANCEL 1
 #else
-  static JavaVM * AndroidJavaVM;
-  JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
-  {
-    AndroidJavaVM = vm;
-    return JNI_VERSION_1_6;
-  }
+  //static JavaVM * AndroidJavaVM;
+  //JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
+  //{
+  //  AndroidJavaVM = vm;
+  //  return JNI_VERSION_1_6;
+  //}
 #endif
 
 

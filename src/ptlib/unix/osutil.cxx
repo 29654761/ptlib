@@ -283,7 +283,7 @@ static PString CanonicaliseDirectory(const PString & path)
 {
   PString canonical_path;
 
-  if (path[0] == '/')
+  if (path[(PINDEX)0] == '/')
     canonical_path = '/';
   else {
     canonical_path.SetSize(P_MAX_PATH);
@@ -979,7 +979,7 @@ bool PFilePath::IsValid(const PString & str)
 
 bool PFilePath::IsAbsolutePath(const PString & path)
 {
-  return path[0] == '/';
+  return path[(PINDEX)0] == '/';
 }
 
 

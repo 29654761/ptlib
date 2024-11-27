@@ -396,9 +396,10 @@
   #include <android/log.h>
 
   #undef  OUTPUT_MESSAGE
-  #define OUTPUT_MESSAGE() \
+#define OUTPUT_MESSAGE()
+  /*#define OUTPUT_MESSAGE() \
       TRACE_MESSAGE(); \
-      __android_log_assert("", PProcess::Current().GetName(), "%s", msg.c_str());
+      __android_log_assert("", PProcess::Current().GetName().c_str(), "%s", msg.c_str());*/
 
   static const char ActionMessage[] = "Ignoring";
 

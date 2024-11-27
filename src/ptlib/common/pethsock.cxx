@@ -443,7 +443,7 @@ int PEthSocket::Frame::GetDataLink(PBYTEArray & payload, Address & src, Address 
 
     // Subtract off the 802.2 header and SNAP data
     len_or_type -= sizeof(header.snap)-sizeof(header.snap.payload);
-    if (m_rawSize < len_or_type + (header.snap.payload - &m_rawData[0])) {
+    if (m_rawSize < len_or_type + (header.snap.payload - &m_rawData[(PINDEX)0])) {
       PTRACE(2, "Frame (SNAP) truncated, size=" << m_rawSize);
       return -1;
     }
@@ -454,7 +454,7 @@ int PEthSocket::Frame::GetDataLink(PBYTEArray & payload, Address & src, Address 
 
   // Special case for Novell netware's stuffed up 802.3
   if (header.snap.dsap == 0xff && header.snap.ssap == 0xff) {
-    if (m_rawSize < len_or_type + (&header.snap.dsap - &m_rawData[0])) {
+    if (m_rawSize < len_or_type + (&header.snap.dsap - &m_rawData[(PINDEX)0])) {
       PTRACE(2, "Frame (802.3) truncated, size=" << m_rawSize);
       return -1;
     }
@@ -469,7 +469,7 @@ int PEthSocket::Frame::GetDataLink(PBYTEArray & payload, Address & src, Address 
 
   // Subtract off the 802.2 header
   len_or_type -= sizeof(header.snap.dsap)+sizeof(header.snap.ssap)+sizeof(header.snap.ctrl);
-  if (m_rawSize < len_or_type + (header.snap.oui - &m_rawData[0])) {
+  if (m_rawSize < len_or_type + (header.snap.oui - &m_rawData[(PINDEX)0])) {
     PTRACE(2, "Frame (802.2) truncated, size=" << m_rawSize);
     return -1;
   }
@@ -518,7 +518,7 @@ int PEthSocket::Frame::GetIP(PBYTEArray & payload, PIPSocket::Address & src, PIP
   if (GetDataLink(ip) != 0x800) // IPv4
     return -1;
 
-  PINDEX totalLength = (ip[2]<<8)|ip[3]; // Total length of packet
+  PINDEX totalLength = (ip[(PINDEX)2]<<8)|ip[(PINDEX)3]; // Total length of packet
   if (totalLength == 0)
     totalLength = ip.GetSize(); // presume to be part of TCP segmentation offload (TSO), whatever THAT is
   else if (totalLength > ip.GetSize()) {
@@ -526,7 +526,7 @@ int PEthSocket::Frame::GetIP(PBYTEArray & payload, PIPSocket::Address & src, PIP
     return -1;
   }
 
-  PINDEX headerLength = (ip[0]&0xf)*4; // low 4 bits in DWORDS, is this in bytes
+  PINDEX headerLength = (ip[(PINDEX)0]&0xf)*4; // low 4 bits in DWORDS, is this in bytes
   if (totalLength < headerLength) {
     PTRACE(2, "Malformed IP header, length " << totalLength << " smaller than header " << headerLength);
     return -1;
@@ -538,8 +538,8 @@ int PEthSocket::Frame::GetIP(PBYTEArray & payload, PIPSocket::Address & src, PIP
   dst = PIPSocket::Address(4, ip+16);
 
   // Check for fragmentation
-  bool isFragment = (ip[6] & 0x20) != 0;
-  PINDEX fragmentOffset = (((ip[6]&0x1f)<<8)+ip[7])*8;
+  bool isFragment = (ip[(PINDEX)6] & 0x20) != 0;
+  PINDEX fragmentOffset = (((ip[(PINDEX)6]&0x1f)<<8)+ip[(PINDEX)7])*8;
   PINDEX fragmentsSize = m_fragments.GetSize();
 
   if (fragmentsSize > 0) {
@@ -548,7 +548,7 @@ int PEthSocket::Frame::GetIP(PBYTEArray & payload, PIPSocket::Address & src, PIP
        of fragments for all IP pairs. But that is too hard for now.
     */
     if (m_fragmentSrcIP != src || m_fragmentDstIP != dst)
-      return ip[9]; // Next protocol layer
+      return ip[(PINDEX)9]; // Next protocol layer
 
     if (fragmentsSize > fragmentOffset) {
       PTRACE(5, "Repeated IP fragment at " << fragmentOffset << " on " << src << " -> " << dst);
@@ -563,10 +563,10 @@ int PEthSocket::Frame::GetIP(PBYTEArray & payload, PIPSocket::Address & src, PIP
   }
   else {
     if (!isFragment)
-      return ip[9]; // Next protocol layer
+      return ip[(PINDEX)9]; // Next protocol layer
 
     // New fragmented IP start
-    m_fragmentProto = ip[9]; // Next protocol layer
+    m_fragmentProto = ip[(PINDEX)9]; // Next protocol layer
     m_fragmentSrcIP = src;
     m_fragmentDstIP = dst;
   }
@@ -632,7 +632,7 @@ bool PEthSocket::Frame::GetUDP(PBYTEArray & payload, PIPSocketAddressAndPort & s
   dst.SetAddress(dstIP);
   dst.SetPort(udp.GetAs<PUInt16b>(2));
 
-  payload.Attach(&udp[8], udp.GetSize() - 8);
+  payload.Attach(&udp[(PINDEX)8], udp.GetSize() - 8);
   return true;
 }
 
@@ -672,7 +672,7 @@ bool PEthSocket::Frame::GetTCP(PBYTEArray & payload, PIPSocketAddressAndPort & s
     return false;
 
   PINDEX headerSize;
-  if (tcp.GetSize() < 20 || tcp.GetSize() < (headerSize = (tcp[12]&0xf0)>>2)) {
+  if (tcp.GetSize() < 20 || tcp.GetSize() < (headerSize = (tcp[(PINDEX)12]&0xf0)>>2)) {
     PTRACE(2, "TCP truncated, size=" << tcp.GetSize());
     return false;
   }

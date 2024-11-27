@@ -142,8 +142,8 @@ PURL::PURL(const PFilePath & filePath)
   if (pathArray.IsEmpty())
     return;
 
-  if (pathArray[0].GetLength() == 2 && pathArray[0][1] == ':')
-    pathArray[0][1] = '|';
+  if (pathArray[(PINDEX)0].GetLength() == 2 && pathArray[(PINDEX)0][(PINDEX)1] == ':')
+    pathArray[(PINDEX)0][(PINDEX)1] = '|';
 
   pathArray.AppendString(filePath.GetFileName());
 
@@ -244,7 +244,7 @@ PString PURL::TranslateString(const PString & str, TranslationType type)
     case QuotedParameterTranslation :
       safeChars += "[]/:@&=+$,|";
       // If already starts and ends with quotes, assume it already formatted correctly.
-      if ((str.GetLength() >= 2 && str[0] == '"' && str[str.GetLength()-1] == '"') ||
+      if ((str.GetLength() >= 2 && str[(PINDEX)0] == '"' && str[str.GetLength()-1] == '"') ||
            str.FindSpan(safeChars) == P_MAX_INDEX)
         return str;
 
@@ -491,10 +491,10 @@ bool PURL::LegacyParse(const char * cstr, const PURLLegacyScheme * schemeInfo)
 
   // if the URL should have leading slash, then remove it if it has one
   if (schemeInfo != NULL && schemeInfo->hasHostPort && schemeInfo->hasPath) {
-    if (str.GetLength() > 2 && str[0] == '/' && str[1] == '/')
+    if (str.GetLength() > 2 && str[(PINDEX)0] == '/' && str[(PINDEX)1] == '/')
       start = 2;
     else
-      m_relativePath = schemeInfo->relativeImpliesScheme || str[0] != '/';
+      m_relativePath = schemeInfo->relativeImpliesScheme || str[(PINDEX)0] != '/';
   }
 
   // parse user/password/host/port
@@ -566,7 +566,7 @@ bool PURL::LegacyParse(const char * cstr, const PURLLegacyScheme * schemeInfo)
     else {
       // determine if the URL has a port number
       // Allow for [ipv6] form
-      if (uphp[0] == '[' && (pos = uphp.Find(']')) != P_MAX_INDEX) {
+      if (uphp[(PINDEX)0] == '[' && (pos = uphp.Find(']')) != P_MAX_INDEX) {
         m_hostname = uphp.Left(pos+1); // No translation if inside []
         pos = uphp.Find(':', pos);
       }
@@ -637,12 +637,12 @@ PFilePath PURL::AsFilePath() const
 
   PStringStream str;
 
-  if (m_path[0].GetLength() == 2 && m_path[0][1] == '|')
-    str << m_path[0][0] << ':' << PDIR_SEPARATOR; // Special case for Windows paths with drive letter
+  if (m_path[(PINDEX)0].GetLength() == 2 && m_path[(PINDEX)0][(PINDEX)1] == '|')
+    str << m_path[(PINDEX)0][(PINDEX)0] << ':' << PDIR_SEPARATOR; // Special case for Windows paths with drive letter
   else {
     if (!m_relativePath)
       str << PDIR_SEPARATOR;
-    str << m_path[0];
+    str << m_path[(PINDEX)0];
   }
 
   for (PINDEX i = 1; i < m_path.GetSize(); i++)
@@ -689,7 +689,7 @@ PString PURL::LegacyAsString(PURL::UrlFormat fmt, const PURLLegacyScheme * schem
     }
 
     if (schemeInfo->hasHostPort) {
-      if (m_hostname[0] == '[') // Should be IPv6 address
+      if (m_hostname[(PINDEX)0] == '[') // Should be IPv6 address
         str << m_hostname;
       else if (m_hostname.Find(':') != P_MAX_INDEX) // Assume it is an IPv6 address
         str << '[' << m_hostname << ']';
@@ -1012,7 +1012,7 @@ class PURL_CalltoScheme : public PURLScheme
       // Actually not part of MS spec, but a lot of people put in the // into
       // the URL, so we take it out of it is there.
       PINDEX start = 0;
-      if (str.GetLength() > 2 && str[0] == '/' && str[1] == '/')
+      if (str.GetLength() > 2 && str[(PINDEX)0] == '/' && str[(PINDEX)1] == '/')
         start = 2;
 
       // For some bizarre reason callto uses + instead of ; for paramters
@@ -1104,7 +1104,7 @@ class PURL_TelScheme : public PURLScheme
     {
       const PConstCaselessString str(cstr);
 
-      PINDEX pos = str.FindSpan("0123456789*#", str[0] != '+' ? 0 : 1);
+      PINDEX pos = str.FindSpan("0123456789*#", str[(PINDEX)0] != '+' ? 0 : 1);
       if (pos == P_MAX_INDEX)
         url.SetUserName(str);
       else {
@@ -1119,12 +1119,12 @@ class PURL_TelScheme : public PURLScheme
 
         PString phoneContext = paramVars("phone-context");
         if (phoneContext.IsEmpty()) {
-          if (str[0] != '+')
+          if (str[(PINDEX)0] != '+')
             return false;
         }
-        else if (phoneContext[0] != '+')
+        else if (phoneContext[(PINDEX)0] != '+')
           url.SetHostName(phoneContext);
-        else if (str[0] != '+')
+        else if (str[(PINDEX)0] != '+')
           url.SetUserName(phoneContext+url.GetUserName());
         else
           return false;

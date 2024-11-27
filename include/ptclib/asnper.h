@@ -8,7 +8,7 @@
  */
 
 #ifdef P_INCLUDE_PER
-
+#include <ptlib.h>
 
 /** Class for ASN Packed Encoding Rules stream.
 */

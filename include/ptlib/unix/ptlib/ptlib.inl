@@ -63,7 +63,7 @@ PINLINE unsigned PTimer::Resolution()
 ///////////////////////////////////////////////////////////////////////////////
 
 PINLINE bool PDirectory::IsRoot() const
-  { return IsSeparator((*this)[0]) && ((*this)[1] == '\0'); }
+  { return IsSeparator((*this)[(PINDEX)0]) && ((*this)[(PINDEX)1] == '\0'); }
 
 PINLINE PDirectory PDirectory::GetRoot() const
   { return PString(PDIR_SEPARATOR); }

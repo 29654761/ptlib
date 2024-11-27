@@ -449,7 +449,7 @@ PBoolean PInternetProtocol::ReadResponse()
   PString prefix = line.Left(continuePos);
   char continueChar = line[continuePos];
   while (line[continuePos] == continueChar ||
-         (!isdigit(line[0]) && strncmp(line, prefix, continuePos) != 0)) {
+         (!isdigit(line[(PINDEX)0]) && strncmp(line, prefix, continuePos) != 0)) {
     info += '\n';
     if (!ReadLine(line))
       return SetLastResponse(-1, info, LastReadError);
@@ -633,7 +633,7 @@ void PMIMEInfo::ReadFrom(istream &strm)
       incomplete = false;
       break;
     }
-    if (line[0] == ' ' || line[0] == '\t') // RFC 2822 section 2.2.2 & 2.2.3
+    if (line[(PINDEX)0] == ' ' || line[(PINDEX)0] == '\t') // RFC 2822 section 2.2.2 & 2.2.3
       lastLine += line;
     else {
       AddMIME(lastLine);
@@ -927,7 +927,7 @@ static PINDEX FindBoundary(const PString & boundary, const char * & bodyPtr, PIN
   PINDEX boundaryLen = boundary.GetLength();
   const char * base = bodyPtr;
   const char * found;
-  while (bodyLen >= boundaryLen && (found = (const char *)memchr(bodyPtr, boundary[0], bodyLen)) != NULL) {
+  while (bodyLen >= boundaryLen && (found = (const char *)memchr(bodyPtr, boundary[(PINDEX)0], bodyLen)) != NULL) {
     PINDEX skip = found - bodyPtr + 1;
     bodyPtr += skip;
     bodyLen -= skip;

@@ -349,10 +349,10 @@ bool PTones::Generate(const PString & descriptor, unsigned sampleRate, unsigned 
       frequency2 = frequencyStr.Mid(pos+1).AsUnsigned();
       operation = frequencyStr[pos];
     }
-    else if (isdigit(frequencyStr[0]))
+    else if (isdigit(frequencyStr[(PINDEX)0]))
       frequency1 = frequency2 = frequencyStr.AsUnsigned();
     else {
-      int note = toupper(frequencyStr[0]) - 'A';
+      int note = toupper(frequencyStr[(PINDEX)0]) - 'A';
       if (note < 0 || note > 7) {
         PTRACE(3, "Illegal note code '" << frequencyStr[0] << "' found in \"" << descriptor << '"');
         return false;
@@ -363,7 +363,7 @@ bool PTones::Generate(const PString & descriptor, unsigned sampleRate, unsigned 
       PINDEX octavePos = 2;
 
       if (frequencyStr.GetLength() > 1) {
-        switch (frequencyStr[1]) {
+        switch (frequencyStr[(PINDEX)1]) {
           case '#' :
           case 'S' :
           case 's' :

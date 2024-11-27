@@ -203,7 +203,7 @@ static PString ApplyRegex(const PString & orig, const PString & regexStr)
   }
 
   // first char in the regex is always the delimiter
-  char delimiter = regexStr[0];
+  char delimiter = regexStr[(PINDEX)0];
 
   // break the string into match and replace strings by looking for non-escaped delimiters
   PString strings[2];
@@ -382,7 +382,7 @@ PBoolean PDNS::ENUMLookup(
 {
   PString e164 = _e164;
 
-  if (e164[0] != '+')
+  if (e164[(PINDEX)0] != '+')
     e164 = PString('+') + e164;
 
   ////////////////////////////////////////////////////////

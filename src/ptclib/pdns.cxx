@@ -392,7 +392,7 @@ PDNS::SRVRecord * PDNS::SRVRecordList::GetFirst()
   if (GetSize() > 0) {
     priList.SetSize(1);
     WORD lastPri = (*this)[0].priority;
-    priList[0] = lastPri;
+    priList.SetAt(0, lastPri);
     (*this)[0].used = false;
     for (i = 1; i < GetSize(); i++) {
       (*this)[i].used = false;
@@ -489,7 +489,7 @@ PBoolean PDNS::GetSRVRecords(
     return false;
 
   PStringStream service;
-  if (_service[0] != '_')
+  if (_service.GetAt(0) != '_')
     service << '_';
 
   service << _service << "._" << type << '.' << domain;

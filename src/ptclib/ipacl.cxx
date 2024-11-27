@@ -94,7 +94,7 @@ void PIpAccessControlEntry::PrintOn(ostream & strm) const
 
   if (domain.IsEmpty())
     strm << address;
-  else if (domain[0] != '\xff')
+  else if (domain[(PINDEX)0] != '\xff')
     strm << domain;
   else {
     strm << "ALL";
@@ -124,17 +124,17 @@ PBoolean PIpAccessControlEntry::Parse(const PString & description)
 
   // Check for the allow/deny indication in first character of description
   int offset = 1;
-  if (description[0] == '-')
+  if (description[(PINDEX)0] == '-')
     allowed = false;
   else {
     allowed = true;
-    if (description[0] != '+')
+    if (description[(PINDEX)0] != '+')
       offset = 0;
   }
 
   // Check for indication entry is from the hosts.allow/hosts.deny file
   hidden = false;
-  if (description[offset] == '@') {
+  if (description[(PINDEX)offset] == '@') {
     offset++;
     hidden = true;
   }
@@ -148,7 +148,7 @@ PBoolean PIpAccessControlEntry::Parse(const PString & description)
   PINDEX slash = description.Find('/', offset);
 
   PString preSlash = description(offset, slash-1);
-  if (preSlash[0] == '.') {
+  if (preSlash[(PINDEX)0] == '.') {
     // If has a leading dot then assume a domain, ignore anything after slash
     domain = preSlash;
     mask = 0;
@@ -238,7 +238,7 @@ PBoolean PIpAccessControlEntry::IsValid()
 
 PBoolean PIpAccessControlEntry::Match(PIPSocket::Address & addr)
 {
-  switch (domain[0]) {
+  switch (domain[(PINDEX)0]) {
     case '\0' : // Must have address field set
       break;
 
@@ -272,7 +272,7 @@ static PBoolean ReadConfigFileLine(PTextFile & file, PString & line)
   do {
     if (!file.ReadLine(line))
       return false;
-  } while (line.IsEmpty() || line[0] == '#');
+  } while (line.IsEmpty() || line[(PINDEX)0] == '#');
 
   PINDEX lastCharPos;
   while (line[lastCharPos = line.GetLength()-1] == '\\') {
