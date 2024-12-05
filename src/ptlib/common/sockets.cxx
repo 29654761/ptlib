@@ -496,7 +496,7 @@ PIPCacheData * PHostByName::GetHost(const PString & name)
   if (key.IsEmpty() ||
       key.FindSpan("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.") != P_MAX_INDEX ||
       key[len-1] == '-') {
-    PTRACE_IF(3, key[0] != '[', "Illegal RFC952 characters in DNS name \"" << key << '"');
+    PTRACE_IF(3, key[(PINDEX)0] != '[', "Illegal RFC952 characters in DNS name \"" << key << '"');
     return NULL;
   }
 

@@ -354,7 +354,7 @@ bool PTones::Generate(const PString & descriptor, unsigned sampleRate, unsigned 
     else {
       int note = toupper(frequencyStr[(PINDEX)0]) - 'A';
       if (note < 0 || note > 7) {
-        PTRACE(3, "Illegal note code '" << frequencyStr[0] << "' found in \"" << descriptor << '"');
+        PTRACE(3, "Illegal note code '" << frequencyStr[(PINDEX)0] << "' found in \"" << descriptor << '"');
         return false;
       }
 
