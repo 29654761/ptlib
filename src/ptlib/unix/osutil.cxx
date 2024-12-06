@@ -1179,11 +1179,19 @@ void PTime::SetCurrentTime()
 #endif // P_VXWORKS
 }
 
+const char* my_nl_langinfo(int item) {
+    switch (item) {
+    case 0: // Example case for LANG
+        return "en_US.UTF-8";
+    default:
+        return "";
+    }
+}
 
 PBoolean PTime::GetTimeAMPM()
 {
 #if defined(P_USE_LANGINFO)
-  return strstr(nl_langinfo(T_FMT), "%p") != NULL;
+  return strstr(my_nl_langinfo(T_FMT), "%p") != NULL;
 #elif defined(P_USE_STRFTIME)
   char buf[30];
   struct tm t;
@@ -1200,10 +1208,11 @@ PBoolean PTime::GetTimeAMPM()
 }
 
 
+
 PString PTime::GetTimeAM()
 {
 #if defined(P_USE_LANGINFO)
-  return PString(nl_langinfo(AM_STR));
+  return PString(my_nl_langinfo(AM_STR));
 #elif defined(P_USE_STRFTIME)
   char buf[30];
   struct tm t;
@@ -1223,7 +1232,7 @@ PString PTime::GetTimeAM()
 PString PTime::GetTimePM()
 {
 #if defined(P_USE_LANGINFO)
-  return PString(nl_langinfo(PM_STR));
+  return PString(my_nl_langinfo(PM_STR));
 #elif defined(P_USE_STRFTIME)
   char buf[30];
   struct tm t;
@@ -1244,9 +1253,9 @@ PString PTime::GetTimeSeparator()
 {
 #if defined(P_LINUX) || defined(P_HPUX9) || defined(P_SOLARIS) || defined(P_IRIX) || defined(P_GNU_HURD)
 #  if defined(P_USE_LANGINFO)
-     char * p = nl_langinfo(T_FMT);
+     const char * p = my_nl_langinfo(T_FMT);
 #  elif defined(P_LINUX) || defined(P_GNU_HURD)
-     char * p = _time_info->time;
+    const char * p = _time_info->time;
 #  endif
   char buffer[2];
   while (*p == '%' || isalpha(*p))
@@ -1277,9 +1286,9 @@ PTime::DateOrder PTime::GetDateOrder()
 {
 #if defined(P_USE_LANGINFO) || defined(P_LINUX) || defined(P_GNU_HURD)
 #  if defined(P_USE_LANGINFO)
-     char * p = nl_langinfo(D_FMT);
+    const char * p = my_nl_langinfo(D_FMT);
 #  else
-     char * p = _time_info->date; 
+    const char * p = _time_info->date;
 #  endif
 
   while (*p == '%')
@@ -1321,9 +1330,9 @@ PString PTime::GetDateSeparator()
 {
 #if defined(P_USE_LANGINFO) || defined(P_LINUX) || defined(P_GNU_HURD)
 #  if defined(P_USE_LANGINFO)
-     char * p = nl_langinfo(D_FMT);
+    const char * p = my_nl_langinfo(D_FMT);
 #  else
-     char * p = _time_info->date; 
+    const char * p = _time_info->date;
 #  endif
   char buffer[2];
   while (*p == '%' || isalpha(*p))
@@ -1354,8 +1363,8 @@ PString PTime::GetDayName(PTime::Weekdays day, NameType type)
 {
 #if defined(P_USE_LANGINFO)
   return PString(
-     (type == Abbreviated) ? nl_langinfo((nl_item)(ABDAY_1+(int)day)) :
-                   nl_langinfo((nl_item)(DAY_1+(int)day))
+     (type == Abbreviated) ? my_nl_langinfo((nl_item)(ABDAY_1+(int)day)) :
+      my_nl_langinfo((nl_item)(DAY_1+(int)day))
                 );
 
 #elif defined(P_LINUX) || defined(P_GNU_HURD)
@@ -1388,8 +1397,8 @@ PString PTime::GetMonthName(PTime::Months month, NameType type)
 {
 #if defined(P_USE_LANGINFO)
   return PString(
-     (type == Abbreviated) ? nl_langinfo((nl_item)(ABMON_1+(int)month-1)) :
-                   nl_langinfo((nl_item)(MON_1+(int)month-1))
+     (type == Abbreviated) ? my_nl_langinfo((nl_item)(ABMON_1+(int)month-1)) :
+      my_nl_langinfo((nl_item)(MON_1+(int)month-1))
                 );
 #elif defined(P_LINUX) || defined(P_GNU_HURD)
   return (type == Abbreviated) ? PString(_time_info->abbrev_month[(int)month-1]) :

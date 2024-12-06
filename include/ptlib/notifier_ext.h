@@ -249,6 +249,13 @@ class PAsyncNotifierFunction : public PNotifierFunctionTemplate<ParamType>
 
 /**Maintain a list of notifiers to be called all at once.
   */
+
+template <typename Arg, typename Result>
+struct my_unary_function {
+    using argument_type = Arg;
+    using result_type = Result;
+};
+
 template <typename ParamType>
 class PNotifierListTemplate : public PObject
 {
@@ -293,7 +300,9 @@ class PNotifierListTemplate : public PObject
       return this->m_list.empty();
     }
 
-    struct IsTarget : public std::unary_function<PObject, bool> 
+
+
+    struct IsTarget : public my_unary_function<PObject, bool>
     {
       PObject * m_obj;
       IsTarget(PObject * obj) : m_obj(obj) { }

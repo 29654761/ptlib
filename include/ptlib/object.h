@@ -95,7 +95,7 @@ using namespace std; // Not a good practice (name space polution), but will take
 ///////////////////////////////////////////////////////////////////////////////
 // Deal with different C++ versions and std::auto_ptr deprecation
 // Edited by zsj
-//#if __cplusplus < 201103L
+#if __cplusplus < 201703L
   template <typename T> class PAutoPtr : public std::auto_ptr<T>
   {
     public:
@@ -104,15 +104,15 @@ using namespace std; // Not a good practice (name space polution), but will take
       PAutoPtr(PAutoPtr & other) : std::auto_ptr<T>(other.release()) { }
       void transfer(PAutoPtr & other) { this->reset(other.release()); }
   };
-//#else
-//  template <typename T> class PAutoPtr : public std::unique_ptr<T>
-//  {
-//    public:
-//      PAutoPtr() = default;
-//      explicit PAutoPtr(T * p) : std::unique_ptr<T>(p) { }
-//      void transfer(PAutoPtr & other) { std::unique_ptr<T>::operator=(std::move(other)); }
-//  };
-//#endif
+#else
+  template <typename T> class PAutoPtr : public std::unique_ptr<T>
+  {
+    public:
+      PAutoPtr() = default;
+      explicit PAutoPtr(T * p) : std::unique_ptr<T>(p) { }
+      void transfer(PAutoPtr & other) { std::unique_ptr<T>::operator=(std::move(other)); }
+  };
+#endif
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2050,7 +2050,7 @@ class PSingleton
   public:
     PSingleton()
     {
-      static auto_ptr<Type> s_pointer;
+      static std::unique_ptr<Type> s_pointer;
       static GuardType s_guard(0);
       if (s_guard++ != 0) {
         s_guard = 1;

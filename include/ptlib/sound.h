@@ -823,14 +823,16 @@ PCREATE_PLUGIN_DEVICE(PSoundChannel);
 #define PCREATE_SOUND_PLUGIN(name, InstanceClass) PCREATE_SOUND_PLUGIN_EX(name, InstanceClass, )
 
 
-#define P_NULL_AUDIO_DEVICE "NullAudio"
-PPLUGIN_STATIC_LOAD(NullAudio, PSoundChannel)
+//#define P_NULL_AUDIO_DEVICE "NullAudio"
+//PPLUGIN_STATIC_LOAD(NullAudio, PSoundChannel)
+
+
 
 #ifdef _WIN32
   #define P_WINDOWS_MULTIMEDIA_DRIVER "WindowsMultimedia"
   PPLUGIN_STATIC_LOAD(WindowsMultimedia, PSoundChannel);
-#elif defined(P_ANDROID)
-  PPLUGIN_STATIC_LOAD(OpenSL_ES, PSoundChannel);
+//#elif defined(P_ANDROID)
+//  PPLUGIN_STATIC_LOAD(OpenSL_ES, PSoundChannel);
 #elif defined(P_MACOSX) || defined(P_IOS)
   PPLUGIN_STATIC_LOAD(Apple, PSoundChannel);
 #elif defined(__BEOS__)
